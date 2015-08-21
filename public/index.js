@@ -65,6 +65,6 @@ app.run(function($rootScope,$interval,$http){
 
 	$interval(function(){
 		updateLotto().then(updateRound)
-	},5000)
+	},10000)
 
 })
