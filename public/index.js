@@ -40,7 +40,13 @@ app.run(function($rootScope,$interval,$http){
 	}
 
 	updateLotto().success(function(){
-		$rootScope.roundIndex = parseInt($rootScope.lotto.roundIndex)
+		var hash = window.location.hash.split('#')[1]
+			,hashInt = parseInt(hash)
+
+		if(hashInt>0)
+			$rootScope.roundIndex = hashInt
+		else
+			$rootScope.roundIndex = parseInt($rootScope.lotto.roundIndex)
 	}).then(updateRound).then(function(){
 		$rootScope.isLoading = false
 	})
@@ -50,6 +56,7 @@ app.run(function($rootScope,$interval,$http){
 		if(!roundIndex) return;
 
 		$rootScope.isLoading = true
+		window.history.replaceState({},'Etherpot - Round '+roundIndex,'#'+roundIndex)
 		updateRound().then(function(){
 			$rootScope.isLoading = false
 		})
