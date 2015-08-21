@@ -3,7 +3,7 @@ var express = require('express')
 	,web3 = require('web3')
 	,path = require('path');
 
-app.use(express.static('./public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 if(!web3.currentProvider)
     web3.setProvider(new web3.providers.HttpProvider("http://localhost:8101"));
