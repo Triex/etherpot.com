@@ -25,7 +25,7 @@
           <div class="navbar-form navbar-right">
             <div class="input-group">
               <div class="input-group-addon">Round #</div>
-                <input type="number" class="form-control" ng-model="roundIndex">
+                <input type="number" class="form-control" ng-model="roundIndex" ng-model-options="{debounce:300}" ng-disable="isLoading">
               </div>
             </div>
           </div>
