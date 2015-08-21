@@ -16,7 +16,7 @@ app.run(function($rootScope,$interval,$http){
 			
 			$rootScope.timeLeft = {
 				hours: Math.floor(secondsLeft/(60*60))
-				,minutes: Math.floor(secondsLeft/(60))
+				,minutes: Math.floor(secondsLeft/(60))%60
 				,seconds: Math.floor(secondsLeft%60)
 			}
 		})

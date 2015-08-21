@@ -5,7 +5,7 @@
     <style>
     	body{padding-top: 60px}
     	[ng-cloak]{display: none}
-    	#hero{text-align: center;}
+    	#hero{text-align: center;margin-bottom: 20px}
     	#pot{font-size: 48px;}
       #tabs{margin-bottom: 20px}
       iframe.twitter-follow-button{margin-top: 10px;}
@@ -35,6 +35,12 @@
     	<div class="alert alert-warning text-center">
     		EtherPot is still in Beta. Use at your own risk.
     	</div>
+      <div class="alert alert-danger text-center" ng-cloak ng-if="!isLoading && lotto && roundIndex<lotto.roundIndex">
+        Round #{{roundIndex}} has ended. Go to the <a href="/">current round</a>
+      </div>
+      <div class="alert alert-danger text-center" ng-cloak ng-if="!isLoading && lotto && roundIndex>lotto.roundIndex">
+        Round #{{roundIndex}} hasn't started yet. Go to the <a href="/">current round</a>
+      </div>
       <div class="alert alert-info text-center" ng-if="isLoading">
         Loading...
       </div>
@@ -51,6 +57,11 @@
           <div id="subpots" ng-if="round" ng-cloak>
             {{round.subpotsCount}} subpots worth ~{{round.subpot/1000000000000000000 | number:2}} Ether each
           </div>
+        </div>
+        <div class="alert alert-info text-center" ng-if="round && round.tickets.length==0" ng-cloak>
+            No one has bought any tickets yet this round!
+          </div>
+        <div ng-show="round.tickets.length>0">
           <ul class="nav nav-tabs" id="tabs">
             <li role="presentation" ng-click="tab='tickets'" ng-class="{active:(tab=='tickets')}"><a href="#">Tickets</a></li>
             <li role="presentation" ng-click="tab='subpots'" ng-class="{active:(tab=='subpots')}"><a href="#">Subpots</a></li>
@@ -83,7 +94,7 @@
                 <td>{{subpot.decisionBlockNumber?subpot.decisionBlockNumber:'...'}}</td>
                 <td>{{subpot.decisionBlockHash?subpot.decisionBlockHash:'...'}}</td>
                 <td>{{subpot.winner?subpot.winner:'...'}}</td>
-                <td>{{subpot.isCashed?'✅':'Nope'}}</td>
+                <td>{{subpot.isCashed?'👍':'Nope'}}</td>
               </tr>
             </table>
           </div>
