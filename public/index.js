@@ -5,6 +5,7 @@ app.run(function($rootScope,$interval,$http){
 	var averageBlockTime = 12.7;
 
 	$rootScope.tab = 'tickets'
+	$rootScope.isLoading = true
 
 	function updateLotto(){
 		return $http.get('api/lotto/').success(function(lotto){
@@ -40,11 +41,18 @@ app.run(function($rootScope,$interval,$http){
 
 	updateLotto().success(function(){
 		$rootScope.roundIndex = parseInt($rootScope.lotto.roundIndex)
-	}).then(updateRound)
+	}).then(updateRound).then(function(){
+		$rootScope.isLoading = false
+	})
+
 
 	$rootScope.$watch('roundIndex',function(roundIndex){
 		if(!roundIndex) return;
-		updateRound()
+
+		$rootScope.isLoading = true
+		updateRound().then(function(){
+			$rootScope.isLoading = false
+		})
 	})
 
 

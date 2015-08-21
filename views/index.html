@@ -26,58 +26,63 @@
 			  </div>
 			</nav>
     <div class="container">
-    	<div class="alert alert-info text-center">
+    	<div class="alert alert-info text-warning">
     		EtherPot is still in Beta. Use at your own risk.
     	</div>
-    	<div id="hero">
-    		<div id="pot" ng-if="round" ng-cloak>{{round.pot/1000000000000000000}} Ether</div>
-    		<div id="remaining" ng-if="lotto && roundIndex==lotto.roundIndex" ng-cloak>
-    			There are {{blocksLeft}} Blocks ( ~
-	    			<span ng-if="timeLeft.hours>0">{{timeLeft.hours}} Hours,</span>
-	    			<span ng-if="timeLeft.minutes>0">{{timeLeft.minutes}} Minutes,</span>
-	    			{{timeLeft.seconds}} Seconds
-	    		) until this round ends
-    		</div>
-        <div id="subpots" ng-if="round" ng-cloak>
-          {{round.subpotsCount}} subpots worth ~{{round.subpot/1000000000000000000 | number:2}} Ether each
-        </div>
-        <ul class="nav nav-tabs">
-          <li role="presentation" ng-click="tab='tickets'" ng-class="{active:(tab=='tickets')}"><a href="#">Tickets</a></li>
-          <li role="presentation" ng-click="tab='subpots'" ng-class="{active:(tab=='subpots')}"><a href="#">Subpots</a></li>
-        </ul>
-        <div ng-if="tab=='tickets'">
-      		<table class="table">
-            <th ng-repeat="(ticket,count) in round.ticketsByAddress">
-              <td>Address</td>
-              <td># of Tickets</td>
-              <td>% of Tickets</td>
-            </th>
-  	    		<tr ng-repeat="(ticket,count) in round.ticketsByAddress">
-  	    			<td>{{$index+1}}.</td>
-              <td>{{ticket}}</td>
-              <td>{{count}}</td>
-              <td>{{100*count/round.tickets.length}}%</td>
-  	    		</tr>
-      		</table>
-        </div>
-        <div ng-if="tab=='subpots'">
-          <table class="table">
-            <th>
-              <td>Decision Block #</td>
-              <td>Decision Block Hash</td>
-              <td>Address</td>
-              <td>Cashed Out?</td>
-            </th>
-            <tr ng-repeat="subpot in round.subpots">
-              <td>{{$index}}.</td>
-              <td>{{subpot.decisionBlockNumber?subpot.decisionBlockNumber:'...'}}</td>
-              <td>{{subpot.decisionBlockHash?subpot.decisionBlockHash:'...'}}</td>
-              <td>{{subpot.winner?subpot.winner:'...'}}</td>
-              <td>{{subpot.isCashed?'✅':''}}</td>
-            </tr>
-          </table>
-        </div>
-    	</div>
+      <div class="alert alert-info text-center" ng-if="isLoading">
+        Loading...
+      </div>
+      <div ng-show="!isLoading" ng-cloak>
+      	<div id="hero">
+      		<div id="pot" ng-if="round" ng-cloak>{{round.pot/1000000000000000000}} Ether</div>
+      		<div id="remaining" ng-if="lotto && roundIndex==lotto.roundIndex" ng-cloak>
+      			There are {{blocksLeft}} Blocks ( ~
+  	    			<span ng-if="timeLeft.hours>0">{{timeLeft.hours}} Hours,</span>
+  	    			<span ng-if="timeLeft.minutes>0">{{timeLeft.minutes}} Minutes,</span>
+  	    			{{timeLeft.seconds}} Seconds
+  	    		) until this round ends
+      		</div>
+          <div id="subpots" ng-if="round" ng-cloak>
+            {{round.subpotsCount}} subpots worth ~{{round.subpot/1000000000000000000 | number:2}} Ether each
+          </div>
+          <ul class="nav nav-tabs">
+            <li role="presentation" ng-click="tab='tickets'" ng-class="{active:(tab=='tickets')}"><a href="#">Tickets</a></li>
+            <li role="presentation" ng-click="tab='subpots'" ng-class="{active:(tab=='subpots')}"><a href="#">Subpots</a></li>
+          </ul>
+          <div ng-if="tab=='tickets'">
+        		<table class="table">
+              <th ng-repeat="(ticket,count) in round.ticketsByAddress">
+                <td>Address</td>
+                <td># of Tickets</td>
+                <td>% of Tickets</td>
+              </th>
+    	    		<tr ng-repeat="(ticket,count) in round.ticketsByAddress">
+    	    			<td>{{$index+1}}.</td>
+                <td>{{ticket}}</td>
+                <td>{{count}}</td>
+                <td>{{100*count/round.tickets.length}}%</td>
+    	    		</tr>
+        		</table>
+          </div>
+          <div ng-if="tab=='subpots'">
+            <table class="table">
+              <th>
+                <td>Decision Block #</td>
+                <td>Decision Block Hash</td>
+                <td>Address</td>
+                <td>Cashed Out?</td>
+              </th>
+              <tr ng-repeat="subpot in round.subpots">
+                <td>{{$index}}.</td>
+                <td>{{subpot.decisionBlockNumber?subpot.decisionBlockNumber:'...'}}</td>
+                <td>{{subpot.decisionBlockHash?subpot.decisionBlockHash:'...'}}</td>
+                <td>{{subpot.winner?subpot.winner:'...'}}</td>
+                <td>{{subpot.isCashed?'✅':''}}</td>
+              </tr>
+            </table>
+          </div>
+      	</div>
+      </div>
       <script src="/bower_components/angular/angular.min.js"></script>
       <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
       <script src="/index.js"></script>
