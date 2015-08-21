@@ -5,6 +5,7 @@
     <style>
     	body{padding-top: 60px}
     	[ng-cloak]{display: none}
+      [ng-click]{cursor: pointer;}
     	#hero{text-align: center;margin-bottom: 20px}
     	#pot{font-size: 48px;}
       #tabs{margin-bottom: 20px}
@@ -25,7 +26,7 @@
           <div class="navbar-form navbar-right">
             <div class="input-group">
               <div class="input-group-addon">Round #</div>
-                <input type="number" class="form-control" ng-model="roundIndex" ng-model-options="{debounce:300}" ng-disabled="isLoading">
+                <input type="number" name="roundIndex" class="form-control" ng-model="roundIndex" ng-model-options="{debounce:300}">
               </div>
             </div>
           </div>
@@ -35,8 +36,8 @@
     	<div class="alert alert-warning text-center">
     		EtherPot is still in Beta. Use at your own risk.
     	</div>
-      <div class="alert alert-danger text-center" ng-cloak ng-if="!isLoading && lotto && roundIndex<lotto.roundIndex">
-        Round #{{roundIndex}} has ended. Go to the <a href="/">current round</a>
+      <div class="alert alert-danger text-center" ng-cloak ng-show="!isLoading && lotto && roundIndex<lotto.roundIndex">
+        Round #{{roundIndex}} has ended. Go to the <a ng-click="roundIndex=lotto.roundIndex">current round</a>
       </div>
       <div class="alert alert-danger text-center" ng-cloak ng-if="!isLoading && lotto && roundIndex>lotto.roundIndex">
         Round #{{roundIndex}} hasn't started yet. Go to the <a href="/">current round</a>

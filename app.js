@@ -20,7 +20,7 @@ app.get('/api/lotto',function(req, res){
 
 	var roundIndex = req.params.roundIndex
 		,round = {
-			roundIndex:Lotto.getRoundIndex()
+			roundIndex:parseInt(Lotto.getRoundIndex())
 			,blocksPerRound:Lotto.getBlocksPerRound()
 			,ticketPrice:Lotto.getTicketPrice()
 			,blockNumber:web3.eth.blockNumber
