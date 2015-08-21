@@ -57,7 +57,7 @@
           </ul>
           <div ng-if="tab=='tickets'">
         		<table class="table">
-              <th ng-repeat="(ticket,count) in round.ticketsByAddress">
+              <th>
                 <td>Address</td>
                 <td># of Tickets</td>
                 <td>% of Tickets</td>
@@ -66,7 +66,7 @@
     	    			<td>{{$index+1}}.</td>
                 <td>{{ticket}}</td>
                 <td>{{count}}</td>
-                <td>{{100*count/round.tickets.length}}%</td>
+                <td>{{100*count/round.tickets.length | number:2}}%</td>
     	    		</tr>
         		</table>
           </div>
@@ -75,7 +75,7 @@
               <th>
                 <td>Decision Block #</td>
                 <td>Decision Block Hash</td>
-                <td>Address</td>
+                <td>Winner</td>
                 <td>Cashed Out?</td>
               </th>
               <tr ng-repeat="subpot in round.subpots">
