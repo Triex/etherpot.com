@@ -14,6 +14,7 @@ var express = require('express')
 app.get('/api/lotto',function(req, res){
 
 	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
 	var batch = web3.createBatch()
 	var lotto = {blocksPerRound:blocksPerRound}
