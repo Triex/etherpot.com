@@ -2,6 +2,7 @@
   <head>
     <title>EtherPot</title>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bower_components/flatui/css/flat-ui.css">
     <style>
     	body{padding-top: 60px}
     	[ng-cloak]{display: none}
@@ -10,110 +11,93 @@
     	#pot{font-size: 48px;}
       #tabs{margin-bottom: 20px}
       iframe.twitter-follow-button{margin-top: 10px;}
+      h1{
+        margin: 10px 0;
+        font: 900 80px/100px "Helvetica Neue", Helvetica, Arial, sans-serif;
+        letter-spacing: -2px;
+      }
+      #tagline{
+        display: block;
+        padding-top: 5px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #666;
+        letter-spacing: 0;
+      }
+      #logo{
+        margin-top:-10px;
+        height:.8em;
+      }
+      #screenshot{max-width: 100%}
+      #downloads{font-size: 17px}
+      #faq{
+        background-color:#3498DB;
+        color:#ECF0F1;
+        padding:50px 0;
+      }
+      #faq h3{margin-bottom: 10px}
+      #faq p{color:#ccc}
+      .codeblock{background-color:black;color:white;font-weight: bold}
+      #hint{
+        line-height: 1.5em;
+        margin-top:20px;
+      }
+      #faq a{color:inherit;}
     </style>
   </head>
   <body ng-app="app">
-  	<nav class="navbar navbar-inverse navbar-top navbar-fixed-top">
-			  <div class="container">
-			    <div class="navbar-header">
-            <a class="navbar-brand">EtherPot</a>
-          </div>
-          <ul class="navbar-nav nav">
-            <li>
-              <a href="https://twitter.com/etherpot" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @etherpot</a>
-            </li>
-          </ul>
-          <div class="navbar-form navbar-right">
-            <div class="input-group">
-              <div class="input-group-addon">Round #</div>
-                <input type="number" name="roundIndex" class="form-control" ng-model="roundIndex" ng-model-options="{debounce:300}" ng-disabled="isLoading">
+  	<div class="container" id="hero">
+      <div class="row">
+        <div class="col col-md-5">
+          <h1>EtherPot <img id="logo" src="logo.png"></h1>
+          <span id="tagline">The Decentralized, Autonomous, and Provably Fair Lottery<br>powered by Ethereum</span>
+          <div class="panel panel-default" style="margin-top:20px">
+            <div class="panel-body">
+              <div id="downloads">
+                <a>Mac</a>
+                <a>Windows</a>
+                <a>Linux</a>
               </div>
+              <p id="hint" class="text-muted">
+                Note: Make sure geth rpc is running and unlocked
+                <br><code>geth --rpc --unlock 0 --rpcport 8545</code>
+              </p>
+              <a href="https://twitter.com/etherpot" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @etherpot</a>
             </div>
           </div>
-			  </div>
-			</nav>
-    <div class="container">
-    	<div class="alert alert-warning text-center">
-    		EtherPot is still in Beta. Use at your own risk.
-    	</div>
-      <div class="alert alert-danger text-center" ng-cloak ng-show="!isLoading && lotto && roundIndex<lotto.roundIndex">
-        Round #{{roundIndex}} has ended. Go to the <a ng-click="roundIndex=lotto.roundIndex">current round</a>
-      </div>
-      <div class="alert alert-danger text-center" ng-cloak ng-if="!isLoading && lotto && roundIndex>lotto.roundIndex">
-        Round #{{roundIndex}} hasn't started yet. Go to the <a href="/">current round</a>
-      </div>
-      <div class="alert alert-info text-center" ng-if="isLoading">
-        Loading...
-      </div>
-      <div ng-show="!isLoading" ng-cloak>
-      	<div id="hero">
-      		<div id="pot" ng-if="round" ng-cloak>{{round.pot/1000000000000000000}} Ether</div>
-      		<div id="remaining" ng-if="lotto && roundIndex==lotto.roundIndex" ng-cloak>
-      			There are {{blocksLeft}} Blocks ( ~
-  	    			<span ng-if="timeLeft.hours>0">{{timeLeft.hours}} Hours,</span>
-  	    			<span ng-if="timeLeft.minutes>0">{{timeLeft.minutes}} Minutes,</span>
-  	    			{{timeLeft.seconds}} Seconds
-  	    		) until this round ends
-      		</div>
-          <div id="subpots" ng-if="round" ng-cloak>
-            {{round.subpotsCount}} subpots worth ~{{round.subpot/1000000000000000000 | number:2}} Ether each
-          </div>
         </div>
-        <div class="alert alert-info text-center" ng-if="round && round.tickets.length==0" ng-cloak>
-            No one has bought any tickets yet this round!
-          </div>
-        <div ng-show="round.tickets.length>0">
-          <ul class="nav nav-tabs" id="tabs">
-            <li role="presentation" ng-click="tab='tickets'" ng-class="{active:(tab=='tickets')}"><a href="#">Tickets</a></li>
-            <li role="presentation" ng-click="tab='subpots'" ng-class="{active:(tab=='subpots')}"><a href="#">Subpots</a></li>
-          </ul>
-          <div ng-if="tab=='tickets'">
-        		<table class="table">
-              <th>
-                <td>Address</td>
-                <td># of Tickets</td>
-                <td>% of Tickets</td>
-              </th>
-    	    		<tr ng-repeat="(ticket,count) in round.ticketsByAddress">
-    	    			<td>{{$index+1}}.</td>
-                <td>{{ticket}}</td>
-                <td>{{count}}</td>
-                <td>{{100*count/round.tickets.length | number:2}}%</td>
-    	    		</tr>
-        		</table>
-          </div>
-          <div ng-if="tab=='subpots'">
-            <table class="table">
-              <th>
-                <td>Decision Block #</td>
-                <td>Decision Block Hash</td>
-                <td>Winner</td>
-                <td>Cashed Out?</td>
-              </th>
-              <tr ng-repeat="subpot in round.subpots">
-                <td>{{$index}}.</td>
-                <td>{{subpot.decisionBlockNumber?subpot.decisionBlockNumber:'...'}}</td>
-                <td>{{subpot.decisionBlockHash?subpot.decisionBlockHash:'...'}}</td>
-                <td>{{subpot.winner?subpot.winner:'...'}}</td>
-                <td>{{subpot.isCashed?'👍':'Nope'}}</td>
-              </tr>
-            </table>
-          </div>
-      	</div>
+        <div class="col col-md-7">
+          <img id="screenshot" src="screenshot.png">
+        </div>
       </div>
-      <script src="/bower_components/angular/angular.min.js"></script>
-      <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-      <script src="/index.js"></script>
-      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-      <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    </div>    
+    <div id="faq">
+    <div class="container">
+      <h3>FAQ</h3>
+      <h4>How much does it cost to play?</h4>
+      <p>Each ticket costs 0.1 ether, or roughly $0.15.</p>
+      <h4>How long does each round last?</h4>
+      <p>6800 blocks, or roughly 1 day.</p>
+      <h4>Whats your cut?</h4>
+      <p>This is just an experiment, so 0%. That means that (except for gas cost) the expected value of playing EtherPot is 1.</p>
+      <h4>How are winners decided?</h4>
+      <p>EtherPot uses the blockhash of the blocks immediately after the round ends to determine the winner.</p>
+      <h4>How do you keep the miners from cheating?</h4>
+      <p>Each pot is split into subpots of 5 ether. Because the value of each supbot is less than the block reward, there is no incentive to cheat.</p>
+      <h4>Who owns EtherPot?</h4>
+      <p>EtherPot is an autonomous contract and has no owner. This website is managed by <a href="http://twitter.com/aakilfernandes">@aakilfernandes</a>.</p>
+    </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-66637104-1', 'auto');
-        ga('send', 'pageview');
+      ga('create', 'UA-66637104-1', 'auto');
+      ga('send', 'pageview');
 
-      </script>
+    </script>
   </body>
 </html>
