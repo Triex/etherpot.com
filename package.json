@@ -1,9 +1,10 @@
 {
-    "name": "lotto",
-    "description": "Lotto",
-    "version": "0.0.1",
-    "dependencies": {
-    	"web3":"*"
-        ,"express": "*"
-    }
+  "name": "lotto",
+  "description": "Lotto",
+  "version": "0.0.1",
+  "dependencies": {
+    "cors": "^2.7.1",
+    "express": "*",
+    "web3": "*"
+  }
 }
