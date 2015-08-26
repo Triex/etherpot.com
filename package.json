@@ -5,6 +5,7 @@
   "dependencies": {
     "cors": "^2.7.1",
     "express": "*",
+    "memory-cache": "^0.1.4",
     "web3": "*"
   }
 }

@@ -3,10 +3,18 @@ var express = require('express')
 	,web3 = require('web3')
 	,path = require('path')
 	,cors = require('cors')
+	,cache = require('memory-cache')
 
 app.use(cors());
 
 app.get('/api/lotto',function(req, res){
+
+	var lotto = cache.get('lotto')
+
+	if(lotto){
+		res.json(lotto);
+		return;
+	}
 
 	try{
 
@@ -41,10 +49,13 @@ app.get('/api/lotto',function(req, res){
 				if(error){
 					res.status(400);
 					res.send(error.message);
+					return;
 				}
 
 				lotto.buyers = buyers
-				res.json(lotto)
+				cache.put('lotto',lotto,10000)
+				res.json(lotto3)
+				return;
 			}))
 
 			batch.execute()
@@ -56,6 +67,7 @@ app.get('/api/lotto',function(req, res){
 	}catch(e){
 		res.status(400);
 		res.send(e.getMessage());
+		return;
 	}
 
 })
